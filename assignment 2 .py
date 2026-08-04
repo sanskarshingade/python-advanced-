@@ -1,0 +1,84 @@
+
+from datetime import datetime
+
+
+def report_header_footer(func):
+    """Decorator to add header and footer to the report."""
+    def wrapper(*args, **kwargs):
+        print("=" * 50)
+        print("          DYNAMIC REPORT GENERATOR")
+        print("=" * 50)
+        func(*args, **kwargs)
+        print("=" * 50)
+        print("           END OF REPORT")
+        print("=" * 50)
+    return wrapper
+
+class Report:
+
+
+    report_count = 0
+
+
+    def __init__(self, title, author):
+        self.title = title
+        self.author = author
+        self.content = []
+        Report.report_count += 1
+
+    def __str__(self):
+        return f"Report Title: {self.title}\nAuthor: {self.author}"
+
+
+    def __len__(self):
+        return len(self.content)
+
+  
+    def add_section(self, heading, text):
+        self.content.append((heading, text))
+
+ 
+    @report_header_footer
+    def generate(self):
+        print(self)
+        print(f"Generated On: {datetime.now()}")
+        print()
+
+        for heading, text in self.content:
+            print(f"{heading}")
+            print("-" * len(heading))
+            print(text)
+            print()
+
+
+    @classmethod
+    def total_reports(cls):
+        print(f"Total Reports Created: {cls.report_count}")
+
+
+report = Report("Student Performance Report", "Umar Mulani")
+
+
+report.add_section(
+    "Introduction",
+    "This report summarizes the academic performance of students."
+)
+
+report.add_section(
+    "Performance Analysis",
+    "The average result is 82%. Attendance has improved significantly."
+)
+
+report.add_section(
+    "Conclusion",
+    "Overall performance is satisfactory. More focus is needed on practical skills."
+)
+
+
+report.generate()
+
+
+print("Number of Sections:", len(report))
+
+
+Report.total_reports()
